@@ -11,6 +11,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MessagingComponent } from './components/messaging/messaging.component';
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+import { myRxStompConfig } from './util/rxStomp.config';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
     UsersComponent,
     LoginComponent,
     PageNotFoundComponent,
-    NavbarComponent
+    NavbarComponent,
+    MessagingComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +31,17 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: InjectableRxStompConfig,
+      useValue: myRxStompConfig
+    },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig]
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
